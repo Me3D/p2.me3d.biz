@@ -6,6 +6,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 					
 	<!-- Controller Specific JS/CSS -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	
 	<?php if(isset($client_files_head)) echo $client_files_head; ?>
 	
 </head>
