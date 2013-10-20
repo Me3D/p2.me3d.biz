@@ -14,26 +14,40 @@ class index_controller extends base_controller {
 	-------------------------------------------------------------------------------------------------*/
 	public function index() {
 		
-		# Any method that loads a view will commonly start with this
-		# First, set the content of the template with a view file
-			$this->template->content = View::instance('v_index_index');
+		/*The goal is to route users to the users index page if they are already logged in.
+		 *Or route them to the main page where a person can login or signup.
+		 */
 			
-		# Now set the <title> tag
-			$this->template->title = "Hello World";
-	
-		# CSS/JS includes
-			/*
-			$client_files_head = Array("");
-	    	$this->template->client_files_head = Utils::load_client_files($client_files);
-	    	
-	    	$client_files_body = Array("");
-	    	$this->template->client_files_body = Utils::load_client_files($client_files_body);   
-	    	*/
-	      					     		
-		# Render the view
+		
+		#Not logged in (or signed up) send to login or signup page
+		if(!$this->user) {
+			        # First, set the content of the template with a view file
+			$this->template->content = View::instance('v_index_index');
+
+			# Now set the <title> tag
+			$this->template->title = "OPA!";
+
+			# Render the view
 			echo $this->template;
+			
+		}
+		
+		else {
+			Router::redirect('/users/index');
+		}						
 
 	} # End of method
-	
+	/* main page for logged in users*/    
+	public function about() {
+        
+        # First, set the content of the template with a view file
+	$this->template->content = View::instance('v_index_about');
+
+	# Now set the <title> tag
+	$this->template->title = "OPA!";
+
+	# Render the view
+	echo $this->template;
+    }
 	
 } # End of class

@@ -1,0 +1,30 @@
+.left {
+    float:left;
+    width: 50%;
+}
+
+.right {
+    float:right;
+    width: 50%;;
+}
+
+.padder {
+    padding-bottom: 10px;
+    
+}
+
+.padtop {
+    padding-top: 10px;
+    
+}
+
+.form-style {
+    background-color: #fff;
+    padding: 10px;
+    
+}
+
+.jumbotron {
+    background: #fff;
+    
+}
