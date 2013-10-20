@@ -26,7 +26,7 @@
 	          <span class="icon-bar"></span>
 	          <span class="icon-bar"></span> 
 	        </button>
-	        <a class="navbar-brand" href="/">OPA!</a>
+	        <a class="navbar-brand" href="/">OPA! Home</a>
 	        <div class="navbar-collapse collapse" id="nav">
 	          <ul class="nav navbar-nav">
 		    <li><a href="/index/about">About</a></li>

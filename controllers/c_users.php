@@ -13,14 +13,20 @@ class users_controller extends base_controller {
         if(!$this->user) {
             Router::redirect('/');
         }
+        
         # First, set the content of the template with a view file
 	$this->template->content = View::instance('v_users_index');
-
+        
+        #pass the user_id over to the actual view
+        $this->template->content->user_id = $this->user->user_id;
+        
 	# Now set the <title> tag
 	$this->template->title = "OPA!";
-
+       
 	# Render the view
 	echo $this->template;
+        
+
     }
 
     /*may never be used*/
@@ -107,12 +113,42 @@ class users_controller extends base_controller {
         Router::redirect("/");
     }
     
-    public function profile($user_name = NULL) {
-        if($user_name == NULL){
+    public function profile($user_id = NULL) {
+        #are they logged in?
+        if(!$this->user) {
+            Router::redirect('/');
+        }
+        
+        #is there a user_id /usrs/profile/### ?
+        if($user_id == NULL){
             echo "No user specified";
         }
-        else {
-            echo "This is user: ".$user_name;
+        else {           
+            $q = 'SELECT first_name, last_name, email
+            FROM users
+            WHERE user_id = "'.$user_id.'" ';
+
+            $profile = DB::instance(DB_NAME)->select_row($q);
+
+            
+            # First, set the content of the template with a view file
+            $this->template->content = View::instance('v_users_profile');
+
+            #pass the first_name
+            $this->template->content->first_name = $profile['first_name'];
+        
+            #pass the last_name
+            $this->template->content->last_name = $profile['last_name'];
+        
+            #pass the email
+            $this->template->content->email = $profile['email'];
+        
+            # Now set the <title> tag
+            $this->template->title = "OPA!";
+       
+            # Render the view
+            echo $this->template; 
+            
         }
     }
             

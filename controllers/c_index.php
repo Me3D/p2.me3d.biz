@@ -21,7 +21,7 @@ class index_controller extends base_controller {
 		
 		#Not logged in (or signed up) send to login or signup page
 		if(!$this->user) {
-			        # First, set the content of the template with a view file
+			# First, set the content of the template with a view file
 			$this->template->content = View::instance('v_index_index');
 
 			# Now set the <title> tag
@@ -37,7 +37,8 @@ class index_controller extends base_controller {
 		}						
 
 	} # End of method
-	/* main page for logged in users*/    
+	
+	/* About */    
 	public function about() {
         
         # First, set the content of the template with a view file
