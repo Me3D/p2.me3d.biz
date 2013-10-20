@@ -18,6 +18,12 @@
 					<div class="controls padder">
 						<input type="password" class="input-block-level" placeholder="Password" name='password'>
 					</div>
+					<?php if(isset($error)): ?>
+						<div class='alert alert-danger'>
+							Login failed. Please double check your email and password.
+						</div>
+						<br>
+					<?php endif; ?>
 					<button class="btn btn-large btn-primary" type="submit">Sign in</button>
 				</div>
 			</form>

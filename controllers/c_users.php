@@ -46,10 +46,13 @@ class users_controller extends base_controller {
     }
 
     
-    public function login(){
+    public function login($error = NULL){
         # First, set the content of the template with a view file
 	$this->template->content = View::instance('v_users_login');
-
+        
+        #pass the existance(NULL or not NULL) of $error
+        $this->template->content->error = $error;
+        
 	# Now set the <title> tag
 	$this->template->title = "OPA! Login";
 
@@ -79,7 +82,7 @@ class users_controller extends base_controller {
         }
         #fail
         else {
-            echo "login failed";
+            Router::redirect('/users/login/error');
         }
     }
     
