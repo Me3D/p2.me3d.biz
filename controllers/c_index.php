@@ -44,6 +44,11 @@ class index_controller extends base_controller {
         # First, set the content of the template with a view file
 	$this->template->content = View::instance('v_index_about');
 
+	#if the user is logged in, this will help setup thier navbar.
+	if($this->user){
+		#pass the user_id over to the actual view
+		$this->template->content->user_id = $this->user->user_id;
+	}
 	# Now set the <title> tag
 	$this->template->title = "OPA!";
 
