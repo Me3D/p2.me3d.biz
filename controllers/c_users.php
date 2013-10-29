@@ -46,19 +46,38 @@ class users_controller extends base_controller {
 
     
     /*Avatar upload and resize */
+    /*This will take in an image and save a png copy of it on the server.  */
     public function p_upload(){
-        
-        Upload::upload($_FILES, "/uploads/avatars/", array("jpg", "jpeg", "gif", "png"), $this->user->user_id);
-        
         //get file extension
         $parts = pathinfo( ($_FILES['avatar_pic']['name']) );
-        //resize the image to 258x181 -- usually it's 258 wide then optimal height.
-        $imgObj = new Image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.$parts['extension']);
-        //echo $imgObj->exists();
-        $imgObj->resize(100, 100); 
-        $imgObj->save_image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.$parts['extension']);
-        Router::redirect("/users/profile/".$this->user->user_id);
-    }
+        //boolean set to FALSE for incorrect file extension uploading
+        $upload_ok = FALSE;
+        
+         if($parts['extension'] == "jpg")
+             $upload_ok = TRUE;
+         if($parts['extension'] == "jpeg")
+             $upload_ok = TRUE;    
+         if($parts['extension'] == "png")
+             $upload_ok = TRUE;
+         if($parts['extension'] == "gif")
+             $upload_ok = TRUE;    
+     
+        if($upload_ok) {     
+            //upload the chosen file and rename it temp-user_id.original extension
+            Upload::upload($_FILES, "/uploads/avatars/", array("jpg", "jpeg", "gif", "png"), "temp-".$this->user->user_id);               
+            //resize the image to 258x181 -- usually it's 258 wide then optimal height.
+            $imgObj = new Image(APP_PATH.'uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);
+            //echo $imgObj->exists();
+            $imgObj->resize(100, 100);
+            $imgObj->save_image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.png);    //save the file as user_id.png
+            unlink('uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);  //delete the temp file
+            Router::redirect("/users/profile/".$this->user->user_id);
+        }
+        else {
+            //send the user back to the profile but this time have error set.
+            Router::redirect("/users/profile/".$this->user->user_id."/error");
+        } //else
+    }//p_upload
    
     
     
@@ -146,7 +165,7 @@ class users_controller extends base_controller {
         Router::redirect("/");
     }
     
-    public function profile($user_id = NULL) {
+    public function profile($user_id = NULL, $file_type_error = NULL ) {
         #are they logged in?
         if(!$this->user) {
             Router::redirect('/');
@@ -178,22 +197,21 @@ class users_controller extends base_controller {
         
             #pass the email
             $this->template->content->email = $profile['email'];
-        
-            # Now set the <title> tag
+            
+            #Now set the <title> tag
             $this->template->title = "OPA!";
-       
+             
+            #Tell the view there was a bad file type error, passed from p_upload(). 
+            $this->template->content->file_type_error = $file_type_error;            
+                        
             # Render the view
             echo $this->template; 
             
-        }
-    }
+        }//else
+    }//profile()
             
             
-            
-           
-            
-            
-            
+       
             
 }//end of users_controller class
 
