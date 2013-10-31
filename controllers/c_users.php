@@ -67,7 +67,7 @@ class users_controller extends base_controller {
             Upload::upload($_FILES, "/uploads/avatars/", array("jpg", "jpeg", "gif", "png"), "temp-".$this->user->user_id);               
             //resize the image to 258x181 -- usually it's 258 wide then optimal height.
             $imgObj = new Image(APP_PATH.'uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);
-            //echo $imgObj->exists();
+            
             $imgObj->resize(100, 100);
             $imgObj->save_image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.png);    //save the file as user_id.png
             unlink('uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);  //delete the temp file
@@ -100,6 +100,30 @@ class users_controller extends base_controller {
         $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
         $_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
         DB::instance(DB_NAME)->insert_row('users',$_POST);
+
+        $q = 'SELECT user_id
+                FROM users
+                WHERE token = "'.$_POST['token'].'"';
+         
+        $image_user_id = DB::instance(DB_NAME)->select_field($q);
+        
+        
+        echo $image_user_id;
+        
+        //grab the default image then save it as the user's default image
+        copy(APP_PATH.'/uploads/avatars/default.png', APP_PATH.'/uploads/avatars/'.$image_user_id.'.'.'png');
+        
+        //auto follow onself
+        $data = Array(
+	    "created" => Time::now(),
+	    "user_id" => $image_user_id,
+	    "user_id_followed" => $image_user_id
+	    );
+
+	# Do the insert
+	DB::instance(DB_NAME)->insert('users_users', $data);
+        
+        
         Router::redirect('/users/login');
     }
 
@@ -186,7 +210,7 @@ class users_controller extends base_controller {
             # First, set the content of the template with a view file
             $this->template->content = View::instance('v_users_profile');
 
-            #oass the user id
+            #pass the user id
             $this->template->content->user_id = $this->user->user_id;
             
             #pass the first_name
@@ -210,6 +234,87 @@ class users_controller extends base_controller {
         }//else
     }//profile()
             
+     
+    public function edit($error = NULL) {
+        #are they logged in?
+        if(!$this->user) {
+            Router::redirect('/');
+        }        
+        # First, set the content of the template with a view file
+        $this->template->content = View::instance('v_users_edit');
+        #Now set the <title> tag
+        $this->template->title = "OPA!";
+        #pass the first_name
+        $this->template->content->first_name = $this->user->first_name;
+        
+        #pass the last_name
+        $this->template->content->last_name = $this->user->last_name;
+        
+           #pass the email
+        $this->template->content->email = $this->user->email;
+        #Tell the view there was a entry error 
+        $this->template->content->error = $error;
+        # Render the view
+        echo $this->template; 
+    }
+     
+    public function p_edit() {
+        #are they logged in?
+        if(!$this->user) {
+            Router::redirect('/');
+        }
+        
+        
+        $q = 'SELECT first_name, last_name, email
+                FROM users
+                WHERE user_id = "'.$this->user->user_id.'"';
+        $user = DB::instance(DB_NAME)->select_row($q);
+                
+        print_r($user);
+        
+        //echo $user['first_name'];
+        //print_r($_POST);
+        //just in case they bypass client side checks
+        //if($_POST['first_name'] == NULL || $_POST['last_name'] == NULL) {
+        //    Router::redirect('/users/edit/error');
+        //} else {
+            //echo $this->user->user_id;
+            
+        $q = 'SELECT count(*)
+                FROM users
+                WHERE email = "'.$_POST['email'].'"';   
+        $count = DB::instance(DB_NAME)->select_rows($q);            
+        //if the user enters an email which already exists in the data base kick them back
+            if(intval($count[0]['count(*)']) >= 1) {
+                Router::redirect('/users/edit/error');
+            } else {
+            
+                if($_POST['first_name'] != NULL)
+                {
+                    $user['first_name'] = $_POST['first_name'];
+                }
+                if($_POST['last_name'] != NULL )
+                {
+                    $user['last_name'] = $_POST['last_name'];
+                }
+                if($_POST['email'] != NULL )
+                {
+                    $user['email'] = $_POST['email'];
+                }
+                
+                echo "new user:";
+                print_r($user);
+                
+                
+                DB::instance(DB_NAME)->update("users", $user, "WHERE user_id =".$this->user->user_id);
+                Router::redirect('/users/profile/'.$this->user->user_id);
+            }
+              
+            
+    }//end p_edit
+    
+    
+    
             
        
             

@@ -11,8 +11,13 @@
 	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="/css/style.css">
 	<script src="/js/jquery.js"></script>
+	<script src="/js/jqBootstrapValidation.js"></script>
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 	<?php if(isset($client_files_head)) echo $client_files_head; ?>
+	
+	<script>
+  $(function () { $("input,select,textarea").jqBootstrapValidation(); } )
+</script>
 	
 </head>
 
@@ -26,7 +31,7 @@
 			    <span class="icon-bar"></span>
 			    <span class="icon-bar"></span>
 			  </button>
-			  <a class="navbar-brand" href="/">OPA! Home!</a>
+			  <a class="navbar-brand" href="/">OPA! Home</a>
 			</div>
 		
 		<div class="navbar-collapse collapse">
@@ -51,10 +56,12 @@
 		<?php if(isset($client_files_body)) echo $client_files_body; ?>
 		
 		<!--Footer stuff-->
-		<hr>
-		<div class="footer">
+		<hr class="left">
+			<br>
+		<div class="footclear footer">
 			<p>&copy; OPA! 2013</p>
 		</div>
+		
 	</div>	 <!--container-->
 </body>
 </html>

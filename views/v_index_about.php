@@ -1,10 +1,4 @@
-<script>
-	$("#nav ul").append('<li><a href="/posts/users">Follow Users!</a></li>')
-	$("#nav ul").append('<li><a href="/users/profile/<?php echo $user_id; ?>">Profile</a></li>')
-	$("#nav ul").append('<li><a href="/posts/add">New OPA!</a></li>')
-	$("#nav ul").append('<li><a href="/users/logout">Logout</a></li>')
-	
-</script>
+
 	<div class="jumbotron">
 		<h1>Welcome to OPA!</h1>
 		<p class="lead">I built this site for CSCI E-15.</p>

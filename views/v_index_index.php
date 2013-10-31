@@ -1,3 +1,5 @@
+
+
 <div class="container">
 	
 	<div class="jumbotron">
@@ -18,11 +20,12 @@
 						<div class="panel-body">
 							<form accept-charset="UTF-8" role="form" method='POST' action='/users/p_login'>
 								<fieldset>
-									<div class="form-group">
-									    <input class="form-control" placeholder="E-mail" name="email" type="text">
+									<div class="form-group controls control-group">
+									    <input class="form-control" placeholder="E-mail" name="email" type="email"  required/>
+									 <p class="help-block"></p>
 									</div>
 									<div class="form-group">
-										<input class="form-control" placeholder="Password" name="password" type="password" value="">
+										<input class="form-control" placeholder="Password" name="password" type="password" value="" required/>
 									</div>
 									
 									<input class="btn btn-lg btn-success btn-block" type="submit" value="Sign in">
@@ -44,17 +47,21 @@
 							<div class="panel-body">
 								<form accept-charset="UTF-8" role="form" method='POST' action='/users/p_signup'>
 									<fieldset>
-										<div class="form-group">
-											<input class="form-control" placeholder="Firstname" name='first_name' type="text">
+										<div class="form-group controls control-group">
+											<input class="form-control" minlength="2" placeholder="Firstname" name='first_name' type="text" required/>
+											<p class="help-block"></p>
 										</div>
-										<div class="form-group">
-											<input class="form-control" placeholder="Lastname" name='last_name' type="text">
+										<div class="form-group controls control-group">
+											<input class="form-control" minlength="2" placeholder="Lastname" name='last_name' type="text" required/>
+											<p class="help-block"></p>
 										</div>
-										<div class="form-group">
-											<input class="form-control" placeholder="E-mail" name="email" type="text">
+										<div class="form-group controls control-group">
+											<input class="form-control" placeholder="E-mail" name="email" type="email" required/>
+											<p class="help-block"></p>
 										</div>
-										<div class="form-group">
-											<input class="form-control" placeholder="Password" name="password" type="password" value="">
+										<div class="form-group controls control-group">
+											<input class="form-control" minlength="10" placeholder="Password" name="password" type="password" value="" required/>
+											<p class="help-block"></p>
 										</div>
 										
 						   

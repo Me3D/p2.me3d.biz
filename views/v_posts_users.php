@@ -1,6 +1,7 @@
 <script>
+        $("#nav ul").append('<li><a href="/users/index/"><strong>Read Posts!</strong></a></li>')
+        $("#nav ul").append('<li><a href="/posts/add/">Post New OPA!</a></li>')
 	$("#nav ul").append('<li><a href="/users/profile/<?php echo $user_id; ?>">Profile</a></li>')
-	$("#nav ul").append('<li><a href="/posts/add">New OPA!</a></li>')
 	$("#nav ul").append('<li><a href="/users/logout">Logout</a></li>')
 	
 </script>
@@ -13,14 +14,30 @@ Mark = user_id 13...If he is followed then the $connections[13] should exist.
 -->
 
 <br> <br>
+
+
+
+
 <?php foreach($users as $user): ?>
-	<?=$user['first_name']?> <?=$user['last_name']?>
-
-	<?php if (isset($connections[$user['user_id']])): ?>
-	<a href='/posts/unfollow/<?=$user['user_id']?>'>Unfollow</a>
-	<?php else: ?>
-	<a href='/posts/follow/<?=$user['user_id']?>'>Follow</a>
-	<?php endif; ?>
-	<br> <br>
-
+        <div class="row well">
+            <div class="row col-md-4">
+                <div class=""><a class=""><img src="/uploads/avatars/<?=$user['user_id'].'.png'?>" alt=""></a></div>
+                    <div class=""><p><?=$user['first_name']?> <?=$user['last_name']?></p></div>
+                <?php if (isset($connections[$user['user_id']])): ?>
+                    <a href='/posts/unfollow/<?=$user['user_id']?>'>Unfollow</a>
+                <?php else: ?>
+                    <a href='/posts/follow/<?=$user['user_id']?>'>Follow</a>
+                <?php endif; ?>
+                <br> <br>
+            </div>
+        </div>
+        <!-- row well -->
 <?php endforeach ?>
+
+
+
+
+
+
+
+

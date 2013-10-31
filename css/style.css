@@ -5,7 +5,12 @@
 
 .right {
     float:right;
-    width: 50%;;
+    width: 50%;
+}
+
+.footclear {
+    clear:both;
+    
 }
 
 .padder {
@@ -35,4 +40,8 @@ padding: 30px;
 
 .navbar {
 margin-bottom: 30px;
+}
+
+.wordwrap {
+    word-wrap:break-word;
 }
