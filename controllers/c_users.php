@@ -48,7 +48,12 @@ class users_controller extends base_controller {
     /*Avatar upload and resize */
     /*This will take in an image and save a png copy of it on the server.  */
     public function p_upload(){
-        //get file extension
+        
+        if(!isset($parts)){
+                        //send the user back to the profile but this time have error set.
+            Router::redirect("/users/profile/".$this->user->user_id."/error");
+        }
+        //get file extension      
         $parts = pathinfo( ($_FILES['avatar_pic']['name']) );
         //boolean set to FALSE for incorrect file extension uploading
         $upload_ok = FALSE;
@@ -69,9 +74,9 @@ class users_controller extends base_controller {
             $imgObj = new Image(APP_PATH.'uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);
             
             $imgObj->resize(100, 100);
-            $imgObj->save_image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.png);    //save the file as user_id.png
+            $imgObj->save_image(APP_PATH.'uploads/avatars/'.$this->user->user_id.'.'.'png');    //save the file as user_id.png
             unlink('uploads/avatars/'.'temp-'.$this->user->user_id.'.'.$parts['extension']);  //delete the temp file
-            Router::redirect("/users/profile/".$this->user->user_id);
+           Router::redirect("/users/profile/".$this->user->user_id);
         }
         else {
             //send the user back to the profile but this time have error set.
@@ -250,6 +255,9 @@ class users_controller extends base_controller {
         #pass the last_name
         $this->template->content->last_name = $this->user->last_name;
         
+        #pass the user_id over to the actual view
+        $this->template->content->user_id = $this->user->user_id;
+        
            #pass the email
         $this->template->content->email = $this->user->email;
         #Tell the view there was a entry error 
@@ -270,7 +278,7 @@ class users_controller extends base_controller {
                 WHERE user_id = "'.$this->user->user_id.'"';
         $user = DB::instance(DB_NAME)->select_row($q);
                 
-        print_r($user);
+        
         
         //echo $user['first_name'];
         //print_r($_POST);
@@ -302,9 +310,7 @@ class users_controller extends base_controller {
                     $user['email'] = $_POST['email'];
                 }
                 
-                echo "new user:";
-                print_r($user);
-                
+              
                 
                 DB::instance(DB_NAME)->update("users", $user, "WHERE user_id =".$this->user->user_id);
                 Router::redirect('/users/profile/'.$this->user->user_id);
