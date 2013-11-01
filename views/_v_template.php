@@ -59,7 +59,7 @@
 		<hr class="left">
 			<br>
 		<div class="footclear footer">
-			<p>&copy; OPA! 2013</p>
+			<p>&copy; OPA! 2013 Mark Stites ~ markstites [at] fas [dot] harvard [dot] edu</p>
 		</div>
 		
 	</div>	 <!--container-->
