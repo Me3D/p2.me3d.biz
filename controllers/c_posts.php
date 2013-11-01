@@ -34,15 +34,14 @@ class posts_controller extends base_controller {
 		Router::redirect("/users/index");
 	}
 
-	
-	/* deprecated and moved to users/index */
-	//    /posts/  This will show all the posts this user is following. To include himself.
+
+	/* deprecated and moved to users/index
 	public function index(){
 		if(!$this->user) {
 			Router::redirect('/');
 		}
 		$this->template->content = View::instance('v_users_index');
-
+		$this->template->content = DB::instance(DB_NAME)->sanitize($this->template->content);
 
 		$q = 'SELECT 
 	            posts.content,
@@ -63,7 +62,7 @@ class posts_controller extends base_controller {
 		echo $this->template;
 
 	}//end index
-
+*/
 	
 	//lists all the users, and allows for follow/unfollow
 	public function users() {
@@ -72,6 +71,8 @@ class posts_controller extends base_controller {
 		}
 		$this->template->content = View::instance('v_posts_users');
 		$this->template->content->user_id = $this->user->user_id;
+		
+		$this->template->content->user_id = DB::instance(DB_NAME)->sanitize($this->template->content->user_id);
 		
 		//get a big list of all users, except for this user
 		$q = 'SELECT *
@@ -91,6 +92,7 @@ class posts_controller extends base_controller {
 		//user_id_followed will is also set the array index.
 		//In the v_posts_users.php the for each will loop through the entire $users' array and determine whether
 		//they are being followed or not based upon whether the array index is exisitng or not.	
+		$this->user->user_id = DB::instance(DB_NAME)->sanitize($this->user->user_id);
 		$q = 'SELECT *
 			FROM users_users
 			WHERE user_id = '.$this->user->user_id;
@@ -134,7 +136,12 @@ class posts_controller extends base_controller {
 			Router::redirect('/');
 		}
 		# Delete this connection
+		$this->user->user_id = DB::instance(DB_NAME)->sanitize($this->user->user_id);
+		$user_id_followed = DB::instance(DB_NAME)->sanitize($user_id_followed);
+		
 		$where_condition = 'WHERE user_id = '.$this->user->user_id.' AND user_id_followed = '.$user_id_followed;
+		
+		
 		DB::instance(DB_NAME)->delete('users_users', $where_condition);
 
 		 # Send them back

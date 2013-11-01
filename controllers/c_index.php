@@ -17,43 +17,46 @@ class index_controller extends base_controller {
 		/*The goal is to route users to the users index page if they are already logged in.
 		 *Or route them to the main page where a person can login or signup.
 		 */
+
+			#Not logged in (or signed up) send to login or signup page
+			if(!$this->user) {
+				# First, set the content of the template with a view file
+				$this->template->content = View::instance('v_index_index');
+	
+				# Now set the <title> tag
+				$this->template->title = "OPA!";
+	
+				# Render the view
+				echo $this->template;
+				
+			}
 			
-		
-		#Not logged in (or signed up) send to login or signup page
-		if(!$this->user) {
-			# First, set the content of the template with a view file
-			$this->template->content = View::instance('v_index_index');
+			else {
+				Router::redirect('/users/index');
+			}						
 
-			# Now set the <title> tag
-			$this->template->title = "OPA!";
-
-			# Render the view
-			echo $this->template;
 			
-		}
-		
-		else {
-			Router::redirect('/users/index');
-		}						
-
 	} # End of method
 	
 	/* About */    
 	public function about() {
         
-        # First, set the content of the template with a view file
-	$this->template->content = View::instance('v_index_about');
-
-	#if the user is logged in, this will help setup thier navbar.
-	if($this->user){
-		#pass the user_id over to the actual view
-		$this->template->content->user_id = $this->user->user_id;
+		# First, set the content of the template with a view file
+		$this->template->content = View::instance('v_index_about');
+	
+		#if the user is logged in, this will help setup thier navbar.
+		if($this->user){
+			#pass the user_id over to the actual view
+			$this->template->content->user_id = $this->user->user_id;
+		}
+		# Now set the <title> tag
+		$this->template->title = "OPA!";
+	
+		# Render the view
+		echo $this->template;
 	}
-	# Now set the <title> tag
-	$this->template->title = "OPA!";
-
-	# Render the view
-	echo $this->template;
-    }
+	
+	
+	
 	
 } # End of class

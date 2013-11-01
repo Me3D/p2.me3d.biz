@@ -14,6 +14,7 @@ class users_controller extends base_controller {
             Router::redirect('/');
         }
         
+        
         # First, set the content of the template with a view file
 	$this->template->content = View::instance('v_users_index');
         
@@ -104,32 +105,48 @@ class users_controller extends base_controller {
         $_POST['created'] = Time::now();
         $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
         $_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
-        DB::instance(DB_NAME)->insert_row('users',$_POST);
-
-        $q = 'SELECT user_id
+        
+        $_POST = DB::instance(DB_NAME)->sanitize($_POST);
+        
+        //make sure the email address does not already exist. if it does, just roll them back to /
+        //do nto want to give them an indication of waht addresses are available or in use.
+        $q = 'SELECT count(*)
                 FROM users
-                WHERE token = "'.$_POST['token'].'"';
-         
-        $image_user_id = DB::instance(DB_NAME)->select_field($q);
+                WHERE email = "'.$_POST['email'].'"';   
+        $count = DB::instance(DB_NAME)->select_rows($q);            
+        //if the user enters an email which already exists in the data base kick them back
+            if(intval($count[0]['count(*)']) >= 1) {
+                Router::redirect('/');
+            } else {
+                
+                DB::instance(DB_NAME)->insert_row('users',$_POST);
         
+                $q = 'SELECT user_id
+                        FROM users
+                        WHERE token = "'.$_POST['token'].'"';
+                 
+                $image_user_id = DB::instance(DB_NAME)->select_field($q);
+                
+                
+                
+                
+                //grab the default image then save it as the user's default image
+                copy(APP_PATH.'/uploads/avatars/default.png', APP_PATH.'/uploads/avatars/'.$image_user_id.'.'.'png');
+                
+                $image_user_id = DB::instance(DB_NAME)->sanitize($image_user_id);
+                
+                //auto follow onself
+                $data = Array(
+                    "created" => Time::now(),
+                    "user_id" => $image_user_id,
+                    "user_id_followed" => $image_user_id
+                    );
         
-        
-        
-        //grab the default image then save it as the user's default image
-        copy(APP_PATH.'/uploads/avatars/default.png', APP_PATH.'/uploads/avatars/'.$image_user_id.'.'.'png');
-        
-        //auto follow onself
-        $data = Array(
-	    "created" => Time::now(),
-	    "user_id" => $image_user_id,
-	    "user_id_followed" => $image_user_id
-	    );
-
-	# Do the insert
-	DB::instance(DB_NAME)->insert('users_users', $data);
-        
-        
-        Router::redirect('/users/login');
+                # Do the insert
+                DB::instance(DB_NAME)->insert('users_users', $data);
+                             
+                Router::redirect('/users/login');
+            }
     }
 
     
@@ -148,15 +165,20 @@ class users_controller extends base_controller {
     }
     
     public function p_login(){
+        $_POST = DB::instance(DB_NAME)->sanitize($_POST);
         $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
-
+   
+        
         $q = 'SELECT token
             FROM users
             WHERE email = "'.$_POST['email'].'"
             AND password = "'.$_POST['password'].'"';
-           
             
         $token = DB::instance(DB_NAME)->select_field($q);
+        
+        
+        
+        $token = DB::instance(DB_NAME)->sanitize($token);
         
         
         #success
@@ -194,6 +216,7 @@ class users_controller extends base_controller {
         Router::redirect("/");
     }
     
+    /*process viewing the profile*/
     public function profile($user_id = NULL, $file_type_error = NULL ) {
         #are they logged in?
         if(!$this->user) {
@@ -204,11 +227,13 @@ class users_controller extends base_controller {
         if($user_id == NULL){
             echo "No user specified";
         }
-        else {           
+        else {
+            $user_id = DB::instance(DB_NAME)->sanitize($user_id);
             $q = 'SELECT first_name, last_name, email
             FROM users
             WHERE user_id = "'.$user_id.'" ';
 
+            
             $profile = DB::instance(DB_NAME)->select_row($q);
 
             
@@ -272,21 +297,13 @@ class users_controller extends base_controller {
             Router::redirect('/');
         }
         
-        
+        $this->user->user_id = DB::instance(DB_NAME)->sanitize($this->user->user_id);
         $q = 'SELECT first_name, last_name, email
                 FROM users
                 WHERE user_id = "'.$this->user->user_id.'"';
         $user = DB::instance(DB_NAME)->select_row($q);
                 
-        
-        
-        //echo $user['first_name'];
-        //print_r($_POST);
-        //just in case they bypass client side checks
-        //if($_POST['first_name'] == NULL || $_POST['last_name'] == NULL) {
-        //    Router::redirect('/users/edit/error');
-        //} else {
-            //echo $this->user->user_id;
+        $_POST = DB::instance(DB_NAME)->sanitize($_POST);
             
         $q = 'SELECT count(*)
                 FROM users
