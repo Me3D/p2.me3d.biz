@@ -31,11 +31,11 @@
 							<form accept-charset="UTF-8" role="form" method='POST' action='/users/p_edit'>
 								<fieldset>
 									<div class="form-group controls control-group">
-									    <input class="form-control" minlength="2" placeholder=<?=$first_name?> name="first_name" type="text">
+									    <input class="form-control" minlength="2" maxlength="20" placeholder=<?=$first_name?> name="first_name" type="text">
 									    <p class="help-block"></p>
 									</div>
 									<div class="form-group controls control-group">
-									    <input class="form-control" minlength="2" placeholder=<?=$last_name?> name="last_name" type="text">
+									    <input class="form-control" minlength="2" maxlength="20" placeholder=<?=$last_name?> name="last_name" type="text">
 									    <p class="help-block"></p>
 									</div>
 									<div class="form-group controls control-group">
