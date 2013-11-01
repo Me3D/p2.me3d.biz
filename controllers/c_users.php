@@ -49,7 +49,7 @@ class users_controller extends base_controller {
     /*This will take in an image and save a png copy of it on the server.  */
     public function p_upload(){
         
-        if(!isset($parts)){
+        if(!isset($_FILES)){
                         //send the user back to the profile but this time have error set.
             Router::redirect("/users/profile/".$this->user->user_id."/error");
         }
