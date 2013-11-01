@@ -108,7 +108,7 @@ class users_controller extends base_controller {
         $image_user_id = DB::instance(DB_NAME)->select_field($q);
         
         
-        echo $image_user_id;
+        
         
         //grab the default image then save it as the user's default image
         copy(APP_PATH.'/uploads/avatars/default.png', APP_PATH.'/uploads/avatars/'.$image_user_id.'.'.'png');
