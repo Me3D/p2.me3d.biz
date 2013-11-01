@@ -23,7 +23,7 @@
 					 } 
 					 else 
 					 { 
-						echo '<p class="help-block">Make sure all fields are filled out</p>'; 
+						echo '<p class="help-block">Only edit the item(s) to be changed.</p>'; 
 					 }
 				?>
 					 	</div>
