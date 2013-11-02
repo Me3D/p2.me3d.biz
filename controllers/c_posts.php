@@ -22,7 +22,9 @@ class posts_controller extends base_controller {
 		$_POST['user_id'] = $this->user->user_id;
 		$_POST['created'] = Time::now();
 		$_POST['modified'] = Time::now();
-
+		
+		$_POST['content'] = strip_tags($_POST['content']);
+		
 		//if they get past the JS text limit, we block them here and route them right back.
 		if(strlen($_POST['content']) >=126 ){
 			Router::redirect("/posts/add/error");
