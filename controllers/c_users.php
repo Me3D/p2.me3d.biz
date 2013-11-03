@@ -54,10 +54,15 @@ class users_controller extends base_controller {
                         //send the user back to the profile but this time have error set.
             Router::redirect("/users/profile/".$this->user->user_id."/error");
         }
+        //fixed filename upper case possibility.
+         $_FILES['avatar_pic']['name'] = strtolower($_FILES['avatar_pic']['name']);
         //get file extension      
         $parts = pathinfo( ($_FILES['avatar_pic']['name']) );
         //boolean set to FALSE for incorrect file extension uploading
         $upload_ok = FALSE;
+        
+       
+       
         
          if($parts['extension'] == "jpg")
              $upload_ok = TRUE;
