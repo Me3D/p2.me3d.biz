@@ -6,7 +6,7 @@
 		<h1>Welcome to OPA!</h1>
 		<p class="lead">The worlds greatest microblogging site! It's Greek, so it's gotta be cool, right?</p>
 		<p class="lead">OPA offers the +1 feature of uploading avatar pictures!</p>
-		<p class="lead">We also offer the abilty to edit one's profile info! +1 Woot!</p>
+		<p class="lead">We also offer the ability to edit one's profile info! +1 Woot!</p>
 	</div>
 	<hr>
 	<div class="row-fluid padtop">

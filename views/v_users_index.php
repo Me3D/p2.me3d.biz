@@ -15,7 +15,9 @@ This page will list users and their posts
 
 <br> <br>
 
-
+<?php if (sizeof($posts)< 1 ) { ?>
+<?php echo "<h1>Why don't you follow someone? Click Follow Users above.</h2>" ?>
+<?php }else { ?>
 <?php foreach($posts as $post): ?>
 	<div class="row well col-md-8">
 		<div class=""><a class=""><img src="/uploads/avatars/<?=$post['post_user_id'].'.png'?>" alt=""></a></div>
@@ -23,3 +25,4 @@ This page will list users and their posts
 		<span class="wordwrap"><?php echo $post['content']?></span>
 	</div>
 <?php endforeach ?>
+<?php } ?>
